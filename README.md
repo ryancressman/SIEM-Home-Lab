@@ -38,74 +38,26 @@ The BOTSv3 dataset is designed by Splunk to simulate real-world security events.
 
 ---
 
-## Basic Splunk Exercises with BOTSv3
+## Sample CTF Questions and Answers
+### 1. List out the IAM users that accessed an AWS service (successfully or unsuccessfully) in Frothly’s AWS environment?
+![Screenshot 2024-11-09 141232](https://github.com/user-attachments/assets/7301df23-959b-4bdc-b9ed-c99da6b78fc4)
 
-Here are some exercises using the BOTSv3 dataset to get hands-on experience with Splunk.
+### 2. What is the processor number used on the web servers?
+![Screenshot 2024-11-09 142402](https://github.com/user-attachments/assets/1a8651a2-2d1d-44e9-8f24-2c90203dfc36)
 
-### Exercise 1: Searching for Suspicious Login Activity
-This exercise will help practice search queries for identifying potential unauthorized access.
+### 3. Bud accidentally makes an S3 bucket publicly accessible. What is the event ID of the API call that enabled public access?
+https://repost.aws/knowledge-center/s3-bucket-public-access
+![Screenshot 2024-11-09 143149](https://github.com/user-attachments/assets/945f89fb-25b1-4508-96f7-a83192ef8bba)
 
-**Query:**
-`index=botsv3 sourcetype=access_combined_wcookie action=login status=403`
+### 4. What is the name of the S3 bucket that was made publicly accessible?
+![Screenshot 2024-11-09 143541](https://github.com/user-attachments/assets/ce2ff9fa-6c24-43ff-b3de-d6fcfaccb1b5)
 
-**Description:**  
-This query searches for login attempts with a status of `403` (Forbidden), indicating possible unauthorized access attempts.
+### 5.What is the name of the text file that was successfully uploaded into the S3 bucket while it was publicly accessible?
+![Screenshot 2024-11-09 144525](https://github.com/user-attachments/assets/7924974d-c686-4eac-b4b7-d4e6ca7165f8)
 
----
+### 6. Identify the Most Common HTTP Status Codes for Login Attempts
+![Screenshot 2024-11-09 151132](https://github.com/user-attachments/assets/b52899aa-5aff-4fd9-9493-4647baf8e3b3)
 
-### Exercise 2: Detecting Failed Login Attempts
-Identify accounts with multiple failed login attempts, which may suggest brute-force attacks.
-
-**Query:**
-`index=botsv3 sourcetype=access_combined_wcookie action=login status=401 | stats count by user | where count > 10`
-
-**Description:**  
-This query retrieves usernames with more than 10 failed login attempts (`status=401`), indicating potential brute-force attack attempts.
-
----
-
-### Exercise 3: Analyzing Web Activity
-Examine web traffic to identify unusual browsing patterns that could indicate data exfiltration or recon activities.
-
-**Query:**
-`index=botsv3 sourcetype=access_combined_wcookie | timechart count by http_method`
-
-**Description:**  
-This query provides a time chart of web activity based on HTTP methods, which can reveal spikes in specific actions such as `GET` or `POST` requests.
-
----
-
-### Exercise 4: Identifying Lateral Movement
-Lateral movement detection helps to spot attackers moving between systems within the network.
-
-**Query:**
-`index=botsv3 sourcetype="WinEventLog
-" EventCode=4624 | stats dc(dest) as unique_destinations by src | where unique_destinations > 1`
-
-**Description:**  
-This query finds source systems (`src`) with successful logins to multiple destination systems (`dest`), which could indicate lateral movement by an attacker.
-
----
-
-### Exercise 5: Tracking Privilege Escalation Attempts
-Use this query to detect potential privilege escalation based on event codes and user account changes.
-
-**Query:**
-`index=botsv3 sourcetype="WinEventLog
-" EventCode=4672 | stats count by user`
-
-**Description:**  
-This query looks for event code `4672`, which indicates that a user has been assigned special privileges. Monitoring these can help detect unusual privilege escalations.
-
----
-
-### Exercise 6: Creating a Security Dashboard
-Create a Splunk dashboard to visualize the results of the queries above.
-
-1. Go to **Dashboards > Create New Dashboard**.
-2. Add panels to the dashboard by saving each of the search queries as individual panels.
-3. Configure visualizations for each panel (e.g., bar charts, line charts, etc.) to represent login attempts, failed logins, web activity, and lateral movement.
-4. Save the dashboard for continuous monitoring and quick access to security insights.
 
 ---
 
